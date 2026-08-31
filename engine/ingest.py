@@ -22,7 +22,7 @@ def ingest_pdf(pdf_path: str):
 
     # Chunk with overlap to preserve the cross boundary context
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=8000,
+        chunk_size=800,
         chunk_overlap=100,
         length_function=len,
         separators=["\n\n", "\n", " ", ""]
@@ -65,3 +65,10 @@ def ingest_pdf(pdf_path: str):
         metadatas=metadatas
     )
     print(f"[INGEST]: Successfully stored {len(chunks)} vectors in collection '{COLLECTION_NAME}'")
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) > 1:
+        ingest_pdf(sys.argv[1])
+    else:
+        print("[ERROR]: No PDF path provided. Usage: python ingest.py <path_to_pdf>", flush=True)
