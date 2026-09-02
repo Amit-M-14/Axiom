@@ -16,5 +16,4 @@
   "scripts": {
     "dev": "tsx watch src/server.ts"
   }
-
 }
