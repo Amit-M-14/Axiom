@@ -83,9 +83,14 @@ def query_rag(user_query: str, top_k: int = 4):
         temperature=0.0
     )
 
+    citations = [
+        {**meta, "excerpt": doc}
+        for doc, meta in zip(retrieved_docs, retrieved_metas)
+    ]
+
     return {
         "answer": response.choices[0].message.content,
-        "citations": retrieved_metas
+        "citations": citations
     }
 
 if __name__ == "__main__":

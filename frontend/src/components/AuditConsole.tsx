@@ -12,6 +12,7 @@ interface AuditConsoleProps {
   onSubmitQuery: (query: string) => void
   chunkCount: number
   documentCount: number
+  isQuerying?: boolean
 }
 
 function formatTime(iso: string) {
@@ -87,13 +88,14 @@ export default function AuditConsole({
   onSubmitQuery,
   chunkCount,
   documentCount,
+  isQuerying = false,
 }: AuditConsoleProps) {
   const [draft, setDraft] = useState('')
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault()
     const trimmed = draft.trim()
-    if (!trimmed) return
+    if (!trimmed || isQuerying) return
     onSubmitQuery(trimmed)
     setDraft('')
   }
@@ -131,11 +133,12 @@ export default function AuditConsole({
             onChange={(event) => setDraft(event.target.value)}
             placeholder="Query the compliance index — e.g. covenant breaches in FY2024"
             className="flex-1 bg-transparent text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none"
+            disabled={isQuerying}
           />
           <button
             type="submit"
             className="flex items-center gap-1 rounded border border-slate-700 bg-slate-800 px-2 py-1 text-[11px] font-medium text-slate-300 hover:border-emerald-600/60 hover:text-emerald-400 disabled:opacity-40"
-            disabled={!draft.trim()}
+            disabled={!draft.trim() || isQuerying}
           >
             Run
             <CornerDownLeft className="h-3 w-3" />

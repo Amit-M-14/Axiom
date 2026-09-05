@@ -1,3 +1,11 @@
 .env
 .env.local
 .env.*.local
+
+# Vector database artifacts
+chroma_db/
+*.sqlite3
+
+# Environment variables
+.env
+.env.*

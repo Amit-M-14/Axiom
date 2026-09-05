@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+dist/
+npm-debug.log*
+
+# Python & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+
+# Database & Vector DB Artifacts
+chroma_db/
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# System files
+.DS_Store
+Thumbs.db

@@ -5,6 +5,7 @@ import 'multer'
 import fs from "fs";
 
 const ENGINE_DIR = path.resolve(process.cwd(), "../engine");
+const UPLOADS_DIR = path.resolve(process.cwd(), "uploads");
 const PYTHON_BIN = process.env.PYTHON_PATH || "python";
 
 // Upload & Ingest PDF documents
@@ -65,6 +66,27 @@ export const uploadandIngest = async (req: Request, res: Response) => {
       .json({ error: error.message || "Internal server error during upload." });
   }
 };
+// Serve the raw PDF bytes for a previously ingested filing, so the
+// frontend can render the actual page a citation points to.
+export const serveDocumentFile = (req: Request, res: Response) => {
+  const filename = path.basename(req.params.filename);
+  const uploadPath = path.join(UPLOADS_DIR, filename);
+  const enginePath = path.join(ENGINE_DIR, filename);
+
+  const targetPath = fs.existsSync(uploadPath)
+    ? uploadPath
+    : fs.existsSync(enginePath)
+      ? enginePath
+      : null;
+
+  if (!targetPath) {
+    return res.status(404).json({ error: "Filing not found" });
+  }
+
+  res.setHeader("Content-Type", "application/pdf");
+  res.sendFile(targetPath);
+};
+
 //  Query Audited Financial Filing RAG Pipeline
 
 export const queryDocument = async (req: Request, res: Response) => {
