@@ -124,17 +124,17 @@ The system prompt doesn't ask the model to "be helpful" — it asks it to behave
 ```
 Axiom/
 ├── frontend/                      # React 19 + TypeScript + Vite + Tailwind CSS
-│   ├── src/
-│   │   ├── api/axiomApi.ts        # Typed fetch client for the Express gateway
-│   │   ├── components/
-│   │   │   ├── AuditDashboard.tsx     # Top-level layout, state, upload/query orchestration
-│   │   │   ├── AuditConsole.tsx       # Left pane — query input, message stream, metrics
-│   │   │   ├── DocumentInspector.tsx  # Right pane — live PDF viewer, jumps to cited page
-│   │   │   ├── CitationChip.tsx       # Clickable source citation pill
-│   │   │   ├── IngestionTicker.tsx    # Live ingestion pipeline status strip
-│   │   │   └── MetricTable.tsx        # Structured metric rendering
-│   │   └── types/audit.ts         # Shared domain types (Citation, DocumentMetadata, ...)
-│   └── vite.config.ts
+│   └── src/
+│       ├── api/axiomApi.ts        # Typed fetch client for the Express gateway
+│       ├── components/
+│       │   ├── AuditDashboard.tsx     # Top-level layout, state, upload/query orchestration
+│       │   ├── AuditConsole.tsx       # Left pane — query input, message stream, metrics
+│       │   ├── DocumentInspector.tsx  # Right pane — live PDF viewer, jumps to cited page
+│       │   ├── CitationChip.tsx       # Clickable source citation pill
+│       │   ├── IngestionTicker.tsx    # Live ingestion pipeline status strip
+│       │   └── MetricTable.tsx        # Structured metric rendering
+│       └── types/audit.ts         # Shared domain types (Citation, DocumentMetadata, ...)
+│   
 │
 ├── backend/                        # Node.js + Express + TypeScript API gateway
 │   └── src/
@@ -214,14 +214,3 @@ Open `http://localhost:5173`. There is no separate process to start for the engi
 | `POST` | `/api/documents/upload` | Multipart PDF upload → triggers ingestion |
 | `POST` | `/api/documents/query` | `{ query: string }` → grounded, cited answer |
 | `GET` | `/api/documents/file/:filename` | Streams the original PDF for the Document Inspector |
-
----
-
-## Roadmap
-
-Documented honestly, because a system that claims to have no gaps usually has one it isn't telling you about:
-
-- **Pixel-precise citation highlighting** — citations currently resolve to a page, not a bounding box; a text-layer search pass (e.g. `pdfplumber`) would enable exact in-page highlighting.
-- **Managed vector store adapter** — abstract `rag_pipeline.py`'s retrieval call behind an interface to support Pinecone/Qdrant for multi-tenant deployments.
-- **Persistent audit log** — every query and its cited sources should be written to durable storage for after-the-fact compliance review, not just rendered client-side.
-- **AuthN/RBAC** — retention-class-aware access control (`Public` / `Confidential` / `Restricted`) is modeled in the data layer today but not yet enforced at the API boundary.
